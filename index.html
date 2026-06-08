@@ -370,9 +370,83 @@ footer{background:#0a0a10;border-top:1px solid var(--border);padding:56px 24px 3
 .ds-estimated{background:rgba(245,158,11,0.1);color:var(--yellow);border:1px solid rgba(245,158,11,0.2)}
 /* LOADER STATUS LINE */
 .loader-note{font-size:0.75rem;color:var(--text2);text-align:center;margin-top:8px;min-height:18px;font-style:italic}
+/* TERMINAL */
+.terminal{background:#0c0c14;border:1px solid rgba(0,217,126,0.25);border-radius:14px;overflow:hidden;max-width:540px;margin:0 auto;box-shadow:0 0 40px rgba(0,217,126,0.06)}
+.term-head{background:rgba(255,255,255,0.03);padding:10px 16px;display:flex;align-items:center;gap:0;border-bottom:1px solid rgba(255,255,255,0.06)}
+.tdot{width:11px;height:11px;border-radius:50%;display:inline-block;flex-shrink:0}
+.term-body{padding:16px 18px;font-family:var(--font-mono);font-size:0.78rem;min-height:160px;line-height:1.9;color:#c8fce8}
+.tline{opacity:0;transform:translateY(4px);animation:tappear .18s ease forwards}
+@keyframes tappear{to{opacity:1;transform:translateY(0)}}
+.tcursor{color:var(--accent);animation:blink 1s step-end infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+.t-ok{color:#10b981}
+.t-warn{color:#f59e0b}
+.t-err{color:#ef4444}
+.t-dim{color:#4a4957}
+.t-url{color:#60a5fa}
+.t-val{color:#e2e8f0}
+/* RESULTS TABS */
+.results-tabs{display:flex;gap:4px;margin-bottom:20px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.results-tabs::-webkit-scrollbar{display:none}
+.rtab{font-size:0.78rem;font-weight:600;padding:8px 14px;border-radius:8px;background:rgba(255,255,255,0.04);border:1px solid var(--border);color:var(--text2);cursor:pointer;white-space:nowrap;transition:all .2s;font-family:var(--font-body);flex-shrink:0}
+.rtab:hover{color:var(--text);border-color:rgba(255,255,255,0.15)}
+.rtab.active{background:rgba(0,217,126,0.12);border-color:rgba(0,217,126,0.35);color:var(--accent)}
+.tab-panel{display:none;animation:fadeInUp .3s ease}
+.tab-panel.active{display:block}
+/* SCORE HERO */
+.score-hero{display:flex;gap:20px;align-items:center;background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:16px;padding:22px 24px;margin-bottom:18px;flex-wrap:wrap}
+.score-big-num{font-family:var(--font-mono);font-size:3.5rem;font-weight:500;line-height:1;margin-bottom:2px}
+.score-big-lbl{font-size:0.78rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:10px}
+.score-potential{display:flex;align-items:center;gap:8px;padding:8px 12px;background:rgba(0,217,126,0.07);border:1px solid rgba(0,217,126,0.15);border-radius:8px;font-size:0.82rem;color:var(--text2);margin-bottom:8px}
+.pot-arrow{color:var(--accent);font-size:1.1rem;font-weight:700}
+.pot-num{font-family:var(--font-mono);font-size:1.1rem;color:var(--accent);font-weight:600}
+.score-info-items{display:flex;flex-direction:column;gap:5px}
+.score-info-item{font-size:0.78rem;color:var(--text2);display:flex;align-items:center;gap:6px}
+.score-info-item::before{content:'›';color:var(--muted)}
+/* ISSUE COUNT CARDS */
+.issue-counts{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px}
+.icount-card{background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:10px;padding:14px 10px;text-align:center;transition:transform .2s}
+.icount-card:hover{transform:translateY(-2px)}
+.icount-num{font-family:var(--font-mono);font-size:1.9rem;font-weight:500;line-height:1;margin-bottom:5px}
+.icount-lbl{font-size:0.7rem;color:var(--text2);font-weight:500;line-height:1.3}
+/* PRIORITY BLOCKS */
+.priority-header{display:flex;align-items:center;gap:8px;font-size:0.82rem;font-weight:700;padding:8px 12px;border-radius:8px;margin-bottom:10px}
+.ph-urgent{background:rgba(239,68,68,0.1);color:var(--red);border-left:3px solid var(--red)}
+.ph-week{background:rgba(245,158,11,0.1);color:var(--yellow);border-left:3px solid var(--yellow)}
+.ph-month{background:rgba(59,130,246,0.1);color:var(--accent2);border-left:3px solid var(--accent2)}
+.pitem{background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:8px;transition:border-color .2s}
+.pitem:hover{border-color:rgba(255,255,255,0.12)}
+.pitem-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:6px}
+.pitem-title{font-size:0.875rem;font-weight:600;flex:1;line-height:1.4}
+.diff-badge{font-size:0.63rem;font-weight:700;padding:3px 8px;border-radius:100px;white-space:nowrap;flex-shrink:0;align-self:flex-start;margin-top:2px}
+.diff-easy{background:rgba(16,185,129,0.15);color:#10b981}
+.diff-med{background:rgba(245,158,11,0.15);color:var(--yellow)}
+.diff-hard{background:rgba(239,68,68,0.15);color:var(--red)}
+.pitem-desc{font-size:0.8rem;color:var(--text2);line-height:1.5;margin-bottom:8px}
+.pitem-bottom{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.pitem-impact{font-size:0.73rem;color:var(--accent);font-weight:600;display:flex;align-items:center;gap:4px}
+.pitem-time{font-size:0.7rem;color:var(--muted);display:flex;align-items:center;gap:3px}
+/* COMPARE BARS */
+.compare-grid{display:flex;flex-direction:column;gap:12px;margin-bottom:18px}
+.cbar{display:flex;align-items:center;gap:10px;font-size:0.82rem}
+.cbar-lbl{min-width:76px;color:var(--text2);font-weight:500;flex-shrink:0}
+.cbar-track{flex:1;height:6px;background:rgba(255,255,255,0.06);border-radius:3px;overflow:hidden}
+.cbar-fill{height:100%;border-radius:3px;transition:width 1s ease .2s;width:0%}
+.cbar-val{min-width:44px;text-align:right;font-family:var(--font-mono);font-size:0.78rem;font-weight:500}
+/* RESULT HEADER CLEAN */
+.result-hdr-clean{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:18px;padding-bottom:16px;border-bottom:1px solid var(--border)}
+.rh-domain{font-family:var(--font-head);font-weight:800;font-size:1.3rem}
+.rh-date{font-size:0.75rem;color:var(--muted);font-family:var(--font-mono)}
 @media(max-width:768px){
   .cwv-grid,.lh-scores{grid-template-columns:repeat(2,1fr)}
   .meta-key{min-width:90px}
+  .issue-counts{grid-template-columns:repeat(3,1fr)}
+  .score-hero{flex-direction:column;text-align:center}
+  .score-potential{justify-content:center}
+}
+@media(max-width:480px){
+  .issue-counts{grid-template-columns:1fr 1fr}
+  .pitem-top{flex-direction:column;align-items:flex-start}
 }
 </style>
 </head>
@@ -442,8 +516,19 @@ footer{background:#0a0a10;border-top:1px solid var(--border);padding:56px 24px 3
       </div>
 
       <div class="loader" id="loader">
-        <div class="loader-steps" id="loaderSteps"></div>
-        <div class="loader-bar"><div class="loader-bar-fill" id="loaderBarFill"></div></div>
+        <div class="terminal" id="terminal">
+          <div class="term-head">
+            <span class="tdot" style="background:#ef4444"></span>
+            <span class="tdot" style="background:#f59e0b;margin:0 5px"></span>
+            <span class="tdot" style="background:#10b981"></span>
+            <span style="margin-left:10px;font-size:0.72rem;color:var(--text2);font-family:var(--font-mono)">sgdata-seo-analyzer</span>
+          </div>
+          <div class="term-body" id="termBody">
+            <span class="tcursor" id="tcursor">█</span>
+          </div>
+        </div>
+        <div class="loader-bar" style="max-width:540px;margin:14px auto 0"><div class="loader-bar-fill" id="loaderBarFill"></div></div>
+        <div class="loader-note" id="loaderNote"></div>
       </div>
 
       <div class="results" id="results"></div>
@@ -876,56 +961,96 @@ function closeMobileMenu() {
   mobileMenu.style.display = 'none';
 }
 
-var loaderMessages = [
-  "Verificando seguridad HTTPS del dominio...",
-  "Conectando con Google PageSpeed Insights...",
-  "Ejecutando auditoría Lighthouse completa...",
-  "Extrayendo meta tags y estructura HTML real...",
-  "Procesando Core Web Vitals y señales SEO...",
-  "Generando diagnóstico final..."
-];
-
-function buildLoaderSteps() {
-  var container = document.getElementById('loaderSteps');
-  container.innerHTML = loaderMessages.map(function(msg, i) {
-    return '<div class="loader-step" id="lstep' + i + '"><div class="step-icon" id="lstepicon' + i + '">◌</div><span>' + msg + '</span></div>';
-  }).join('');
-  if (!document.getElementById('loaderNote')) {
-    var note = document.createElement('div');
-    note.id = 'loaderNote';
-    note.className = 'loader-note';
-    note.textContent = 'Google PageSpeed puede tardar hasta 30 segundos...';
-    container.parentNode.insertBefore(note, container.nextSibling);
-  }
+function tWrite(html, delayFromNow) {
+  return new Promise(function(resolve) {
+    setTimeout(function() {
+      var tb = document.getElementById('termBody');
+      var cursor = document.getElementById('tcursor');
+      if (!tb) { resolve(); return; }
+      var line = document.createElement('div');
+      line.className = 'tline';
+      line.innerHTML = html;
+      if (cursor) tb.insertBefore(line, cursor);
+      else tb.appendChild(line);
+      resolve();
+    }, delayFromNow);
+  });
 }
 
-function animateLoader() {
-  return new Promise(function(resolve) {
-    buildLoaderSteps();
-    document.getElementById('loaderBarFill').style.width = '0%';
-    var i = 0;
-    function next() {
-      if (i > 0) {
-        var prev = document.getElementById('lstep' + (i - 1));
-        var prevIcon = document.getElementById('lstepicon' + (i - 1));
-        if (prev) { prev.className = 'loader-step done'; prevIcon.textContent = '✓'; }
-      }
-      if (i >= loaderMessages.length) {
-        document.getElementById('loaderBarFill').style.width = '95%';
-        var note = document.getElementById('loaderNote');
-        if (note) note.textContent = 'Esperando respuesta de Google PageSpeed Insights...';
-        setTimeout(resolve, 500);
-        return;
-      }
-      var step = document.getElementById('lstep' + i);
-      var icon = document.getElementById('lstepicon' + i);
-      if (step) { step.className = 'loader-step active'; icon.textContent = '◌'; }
-      document.getElementById('loaderBarFill').style.width = ((i + 1) / loaderMessages.length * 90) + '%';
-      i++;
-      setTimeout(next, 2000);
-    }
-    next();
+function tSetProgress(pct) {
+  var bar = document.getElementById('loaderBarFill');
+  if (bar) bar.style.width = pct + '%';
+}
+
+async function animateLoader(url, ssl) {
+  var domain = getDomain(url || '');
+  var tb = document.getElementById('termBody');
+  var cursor = document.getElementById('tcursor');
+  if (tb) { tb.innerHTML = ''; if (cursor) { cursor = document.createElement('span'); cursor.id = 'tcursor'; cursor.className = 'tcursor'; cursor.textContent = '█'; tb.appendChild(cursor); } }
+  tSetProgress(0);
+
+  var sslColor = ssl ? 't-ok' : 't-err';
+  var sslText = ssl ? 'ACTIVO ✓' : 'NO DETECTADO — CRÍTICO ✗';
+
+  await tWrite('<span class="t-dim">$</span> <span class="t-url">sgdata</span> analyze <span class="t-val">' + domain + '</span>', 0);
+  await tWrite('<span class="t-dim">──────────────────────────────────</span>', 180);
+  tSetProgress(8);
+  await new Promise(function(r){setTimeout(r,200)});
+  await tWrite('[<span class="t-ok">✓</span>] Dominio verificado: <span class="t-val">' + domain + '</span>', 0);
+  await tWrite('[<span class="' + sslColor + '">✓</span>] Seguridad HTTPS: <span class="' + sslColor + '">' + sslText + '</span>', 350);
+  tSetProgress(18);
+  await new Promise(function(r){setTimeout(r,400)});
+  await tWrite('[<span class="t-warn">⟳</span>] Conectando Google PageSpeed Insights...', 0);
+  tSetProgress(28);
+  await new Promise(function(r){setTimeout(r,2200)});
+  await tWrite('[<span class="t-warn">⟳</span>] Ejecutando auditoría Lighthouse...', 0);
+  tSetProgress(42);
+  await new Promise(function(r){setTimeout(r,2800)});
+  await tWrite('[<span class="t-warn">⟳</span>] Midiendo Core Web Vitals (LCP, FCP, CLS)...', 0);
+  tSetProgress(56);
+  await new Promise(function(r){setTimeout(r,2200)});
+  await tWrite('[<span class="t-warn">⟳</span>] Extrayendo meta tags del HTML real...', 0);
+  tSetProgress(70);
+  await new Promise(function(r){setTimeout(r,1800)});
+  await tWrite('[<span class="t-warn">⟳</span>] Evaluando señales SEO técnicas...', 0);
+  tSetProgress(82);
+  await new Promise(function(r){setTimeout(r,2000)});
+  await tWrite('[<span class="t-warn">⟳</span>] Calculando score y plan de acción...', 0);
+  tSetProgress(91);
+  await new Promise(function(r){setTimeout(r,1400)});
+
+  var note = document.getElementById('loaderNote');
+  if (note) note.textContent = 'Esperando respuesta de Google PageSpeed (puede tardar hasta 40s)...';
+}
+
+function finalizeTerminal(data) {
+  if (!data) return;
+  var ls = data.lighthouseScores;
+  var cwv = data.coreWebVitals;
+  var lines = [];
+  if (ls) {
+    lines.push('[<span class="t-ok">✓</span>] Perf <span class="t-val">' + ls.performance + '</span> · SEO <span class="t-val">' + ls.seo + '</span> · A11y <span class="t-val">' + ls.accessibility + '</span> · BP <span class="t-val">' + ls.bestPractices + '</span>');
+  }
+  if (cwv && cwv.lcp) {
+    var lcpCls = cwv.lcp.status === 'good' ? 't-ok' : cwv.lcp.status === 'warn' ? 't-warn' : 't-err';
+    lines.push('[<span class="' + lcpCls + '">✓</span>] LCP: <span class="' + lcpCls + '">' + (cwv.lcp.display||'N/D') + '</span>  FCP: <span class="t-val">' + (cwv.fcp.display||'N/D') + '</span>  CLS: <span class="t-val">' + (cwv.cls.display||'N/D') + '</span>');
+  }
+  if (data.realMeta && data.realMeta.ok) {
+    var m = data.realMeta;
+    lines.push('[<span class="t-ok">✓</span>] Title: <span class="t-val">"' + (m.title||'').slice(0,40) + (m.titleLength>40?'...':'"') + '</span> (' + m.titleLength + ' chars)');
+  }
+  var total = ((data.criticalIssues||[]).length + (data.warnings||[]).length + (data.hiddenIssuesCount||8));
+  lines.push('[<span class="t-ok">✓</span>] Score final: <span class="t-val">' + data.score + '/100</span> — <span class="t-warn">' + total + ' problemas detectados</span>');
+  lines.push('<span class="t-dim">──────────────────────────────────</span>');
+  lines.push('<span class="t-ok">✓ Análisis completado. Mostrando resultados...</span>');
+
+  var delay = 0;
+  lines.forEach(function(l) {
+    tWrite(l, delay);
+    delay += 180;
   });
+  tSetProgress(100);
+  return delay;
 }
 
 async function fetchPageSpeed(url, strategy) {
@@ -1250,7 +1375,7 @@ async function startAudit() {
   loader.style.display = 'block';
   document.getElementById('results').style.display = 'none';
 
-  var loaderP = animateLoader();
+  var loaderP = animateLoader(url, ssl);
   var mobileP = fetchPageSpeed(url, 'mobile');
   var desktopP = fetchPageSpeed(url, 'desktop');
   var metaP = fetchRealMeta(url);
@@ -1270,9 +1395,9 @@ async function startAudit() {
   }
 
   currentAnalysisData = data;
+  var termDelay = finalizeTerminal(data);
+  await new Promise(function(r){setTimeout(r, (termDelay||0) + 700)});
   loader.style.display = 'none';
-  var note = document.getElementById('loaderNote');
-  if (note) note.remove();
   renderResults(data);
 }
 
@@ -1450,11 +1575,11 @@ function lhColor(score) {
 }
 
 function cwvCard(label, display, status, threshold) {
-  var badges = {good:'Bien', warn:'Mejorar', bad:'Crítico'};
+  var labels = {good:'Bien', warn:'Mejorar', bad:'Crítico'};
   return '<div class="cwv-card cwv-' + status + '">' +
     '<div class="cwv-label">' + label + '</div>' +
     '<div class="cwv-value">' + (display || 'N/D') + '</div>' +
-    '<span class="cwv-badge ' + status + '">' + (badges[status] || status) + '</span>' +
+    '<span class="cwv-badge ' + status + '">' + (labels[status]||status) + '</span>' +
     (threshold ? '<div class="cwv-threshold">Meta: ' + threshold + '</div>' : '') +
     '</div>';
 }
@@ -1473,20 +1598,70 @@ function metaRow(key, val, status) {
   return '<div class="meta-row"><span class="meta-key">' + key + '</span><span class="meta-val ' + cls + '">' + display + '</span></div>';
 }
 
+function calcPotential(data) {
+  var boost = 0;
+  (data.criticalIssues||[]).forEach(function() { boost += 9; });
+  (data.warnings||[]).forEach(function() { boost += 4; });
+  if (data.metrics) {
+    data.metrics.forEach(function(m) { if (m.status === 'bad') boost += 6; });
+  }
+  return Math.min(96, data.score + boost + 3);
+}
+
+function diffBadge(level) {
+  var map = {easy:['Fácil — 15 min','diff-easy'], med:['Moderado — 2h','diff-med'], hard:['Requiere dev','diff-hard']};
+  var d = map[level] || map.med;
+  return '<span class="diff-badge ' + d[1] + '">' + d[0] + '</span>';
+}
+
+function assignDifficulty(issue) {
+  var t = (issue.title + ' ' + issue.description).toLowerCase();
+  if (t.indexOf('ssl')+t.indexOf('https')+t.indexOf('schema')+t.indexOf('robots')>-4) return 'easy';
+  if (t.indexOf('javascript')+t.indexOf('javascript')+t.indexOf('render-blocking')+t.indexOf('compression')>-4) return 'hard';
+  if (t.indexOf('imagen')+t.indexOf('alt')+t.indexOf('description')+t.indexOf('title')+t.indexOf('canonical')+t.indexOf('og:')>-6) return 'easy';
+  return 'med';
+}
+
+function estimateImpact(issue) {
+  if (issue.type === 'critical') return '+180–450 visitas/mes si se corrige';
+  return '+60–180 visitas/mes si se corrige';
+}
+
+function switchTab(id, btn) {
+  document.querySelectorAll('#results .tab-panel').forEach(function(p){p.classList.remove('active');});
+  document.querySelectorAll('#results .rtab').forEach(function(b){b.classList.remove('active');});
+  var panel = document.getElementById('tab-'+id);
+  if (panel) panel.classList.add('active');
+  if (btn) btn.classList.add('active');
+}
+
+function animateCounter(el, target, duration) {
+  var start = 0;
+  var step = target / (duration / 16);
+  var t = setInterval(function() {
+    start = Math.min(start + step, target);
+    el.textContent = Math.round(start);
+    if (start >= target) clearInterval(t);
+  }, 16);
+}
+
 function renderResults(data) {
   var resultsDiv = document.getElementById('results');
-  var circ = buildScoreCircle(data.score, data.scoreColor);
   var now = new Date();
-  var dateStr = now.toLocaleDateString('es-CO', {day:'2-digit', month:'long', year:'numeric'}) + ' · ' + now.toLocaleTimeString('es-CO', {hour:'2-digit', minute:'2-digit'});
+  var dateStr = now.toLocaleDateString('es-CO', {day:'2-digit', month:'short', year:'numeric'}) + ' · ' + now.toLocaleTimeString('es-CO', {hour:'2-digit', minute:'2-digit'});
+  var potential = calcPotential(data);
+  var scoreCol = data.scoreColor || lhColor(data.score);
+  var critCount = (data.criticalIssues||[]).length;
+  var warnCount = (data.warnings||[]).length;
+  var totalVisible = critCount + warnCount;
+  var totalProbs = totalVisible + (data.hiddenIssuesCount||8);
+  var isReal = data.dataSource !== 'fallback';
 
-  var dsBadge = data.dataSource === 'fallback'
-    ? '<span class="ds-badge ds-estimated">⚠ Datos estimados (PageSpeed no disponible)</span>'
-    : '<span class="ds-badge ds-real">✓ Datos reales — Google PageSpeed Insights</span>';
-
-  var lhHtml = '';
+  /* ── TAB 1: RESUMEN ── */
+  var lhHtml = '', cwvHtml = '';
   if (data.lighthouseScores) {
     var ls = data.lighthouseScores;
-    lhHtml = '<div class="issues-title" style="margin-bottom:12px"><span style="color:var(--accent2)">●</span> Puntuaciones Google Lighthouse (datos reales)</div>' +
+    lhHtml = '<div style="font-size:0.8rem;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">Lighthouse Scores</div>' +
       '<div class="lh-scores">' +
       lhScoreCard('Performance', ls.performance) +
       lhScoreCard('SEO', ls.seo) +
@@ -1494,13 +1669,9 @@ function renderResults(data) {
       lhScoreCard('Best Practices', ls.bestPractices) +
       '</div>';
   }
-
-  var cwvHtml = '';
   if (data.coreWebVitals) {
     var cwv = data.coreWebVitals;
-    cwvHtml = '<div class="cwv-section">' +
-      '<div class="issues-title" style="margin-bottom:12px"><span style="color:var(--accent)">●</span> Core Web Vitals (métricas reales Google)</div>' +
-      '<div class="cwv-grid">' +
+    cwvHtml = '<div class="cwv-section"><div style="font-size:0.8rem;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">Core Web Vitals (móvil)</div><div class="cwv-grid">' +
       cwvCard('FCP', cwv.fcp.display, cwv.fcp.status, '<1.8s') +
       cwvCard('LCP', cwv.lcp.display, cwv.lcp.status, '<2.5s') +
       cwvCard('CLS', cwv.cls.display, cwv.cls.status, '<0.1') +
@@ -1508,143 +1679,194 @@ function renderResults(data) {
       '</div></div>';
   }
 
-  var metaHtml = '';
-  if (data.realMeta && data.realMeta.ok) {
-    var m = data.realMeta;
-    var titleStatus = !m.title ? 'miss' : m.titleLength > 70 ? 'warn' : m.titleLength < 20 ? 'warn' : 'ok';
-    var descStatus = !m.description ? 'miss' : m.descLength > 165 ? 'warn' : m.descLength < 50 ? 'warn' : 'ok';
-    var titleVal = m.title ? ('"' + m.title.slice(0,65) + (m.titleLength > 65 ? '..."' : '"') + ' (' + m.titleLength + ' chars)') : '';
-    var descVal = m.description ? ('"' + m.description.slice(0,80) + (m.descLength > 80 ? '..."' : '"') + ' (' + m.descLength + ' chars)') : '';
-    metaHtml = '<div class="meta-analysis">' +
-      '<div class="meta-analysis-hdr">🔍 Análisis de meta tags (extraídos del HTML real)</div>' +
-      metaRow('Title', titleVal || '', titleStatus) +
-      metaRow('Meta Description', descVal || '', descStatus) +
-      metaRow('H1 (' + m.h1Count + ')', m.h1Count > 0 ? ('"' + (m.h1Texts[0]||'').slice(0,60) + '"') : '', m.h1Count === 1 ? 'ok' : m.h1Count === 0 ? 'miss' : 'warn') +
-      metaRow('Canonical', m.canonical ? m.canonical.slice(0,50) : '', m.canonical ? 'ok' : 'miss') +
-      metaRow('OG Title', m.ogTitle ? m.ogTitle.slice(0,50) : '', m.ogTitle ? 'ok' : 'miss') +
-      metaRow('OG Image', m.ogImage ? 'Definida' : '', m.ogImage ? 'ok' : 'miss') +
-      metaRow('Twitter Card', m.twitterCard || '', m.twitterCard ? 'ok' : 'miss') +
-      metaRow('Schema.org', m.hasSchema ? 'Presente' : '', m.hasSchema ? 'ok' : 'miss') +
-      metaRow('Imágenes sin ALT', m.imgNoAlt > 0 ? (m.imgNoAlt + ' de ' + m.imgTotal + ' sin texto alternativo') : 'Todas con ALT', m.imgNoAlt === 0 ? 'ok' : m.imgNoAlt < 5 ? 'warn' : 'miss') +
-      metaRow('Idioma declarado', m.lang || '', m.lang ? 'ok' : 'miss') +
-      '</div>';
-  }
+  var scoreHeroHtml = '<div class="score-hero">' +
+    '<div><div class="score-big-num" id="scoreCounter" style="color:' + scoreCol + '">0</div>' +
+    '<div style="font-size:0.75rem;color:var(--text2);font-family:var(--font-mono);margin-bottom:2px">/ 100</div>' +
+    '<div class="score-big-lbl" style="color:' + scoreCol + '">' + (data.scoreLabel||'') + '</div>' +
+    '<div class="score-potential">' +
+    '<span class="pot-arrow">↑</span>' +
+    '<span>Podría alcanzar</span>' +
+    '<span class="pot-num">' + potential + '/100</span>' +
+    '<span style="font-size:0.72rem;color:var(--muted)">corrigiendo los problemas</span>' +
+    '</div></div>' +
+    '<div style="flex:1;min-width:180px">' +
+    '<div class="score-info-items">' +
+    '<div class="score-info-item">Analizado: ' + data.domain + '</div>' +
+    '<div class="score-info-item">' + dateStr + '</div>' +
+    '<div class="score-info-item">' + (isReal ? '<span style="color:var(--accent);font-weight:600">✓ Datos reales Google PageSpeed</span>' : '<span style="color:var(--yellow)">⚠ Datos estimados</span>') + '</div>' +
+    '</div>' +
+    '</div>' +
+    '</div>';
 
-  var metricsHtml = (data.metrics || []).map(function(m, i) {
-    return '<div class="metric-card border-' + m.status + '" style="animation-delay:' + (i * 0.08) + 's">' +
+  var countHtml = '<div class="issue-counts">' +
+    '<div class="icount-card"><div class="icount-num" style="color:var(--red)">' + critCount + '</div><div class="icount-lbl">Críticos</div></div>' +
+    '<div class="icount-card"><div class="icount-num" style="color:var(--yellow)">' + warnCount + '</div><div class="icount-lbl">Advertencias</div></div>' +
+    '<div class="icount-card"><div class="icount-num" style="color:var(--muted)">' + (data.hiddenIssuesCount||8) + '</div><div class="icount-lbl">Ocultos</div></div>' +
+    '</div>';
+
+  var metricsHtml = (data.metrics||[]).map(function(m,i){
+    return '<div class="metric-card border-' + m.status + '" style="animation-delay:' + (i*0.07) + 's">' +
       '<div class="metric-title">' + m.label + '</div>' +
       '<div class="metric-value">' + m.value + '</div>' +
       statusBadge(m.status) +
-      '<div class="metric-bar"><div class="metric-bar-fill bar-' + m.status + '" data-width="' + Math.min(100, Math.round(Math.abs(m.numericValue))) + '"></div></div>' +
+      '<div class="metric-bar"><div class="metric-bar-fill bar-' + m.status + '" data-width="' + Math.min(100,Math.round(Math.abs(m.numericValue))) + '"></div></div>' +
       '<div class="metric-detail">' + m.detail + '</div>' +
       '</div>';
   }).join('');
 
-  var criticalHtml = (data.criticalIssues || []).map(function(issue) {
-    return '<div class="issue-item">' + issueIcon(issue.type) +
-      '<div class="issue-content"><div class="issue-title">' + issue.title + '</div>' +
-      '<div class="issue-desc">' + issue.description + '</div>' +
-      impactBadge(issue.impact) + '</div></div>';
-  }).join('');
+  var tab1 = scoreHeroHtml + countHtml + lhHtml + cwvHtml +
+    '<div style="font-size:0.8rem;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;margin-top:4px">Métricas Detalladas</div>' +
+    '<div class="metrics-grid">' + metricsHtml + '</div>';
 
-  var warningsHtml = (data.warnings || []).map(function(issue) {
-    return '<div class="issue-item">' + issueIcon(issue.type) +
-      '<div class="issue-content"><div class="issue-title">' + issue.title + '</div>' +
-      '<div class="issue-desc">' + issue.description + '</div>' +
-      impactBadge(issue.impact) + '</div></div>';
-  }).join('');
+  /* ── TAB 2: PROBLEMAS ── */
+  var allIssues = (data.criticalIssues||[]).concat(data.warnings||[]);
+  var urgentHtml = '', weekHtml = '', monthHtml = '';
+  allIssues.forEach(function(issue, idx) {
+    var diff = assignDifficulty(issue);
+    var isUrgent = issue.type === 'critical' && idx < 2;
+    var isWeek = issue.type === 'critical' && idx >= 2 || (issue.type === 'warning' && idx < 2);
+    var item = '<div class="pitem">' +
+      '<div class="pitem-top">' +
+      '<div class="pitem-title">' + (issue.type === 'critical' ? '🔴 ' : '⚠️ ') + issue.title + '</div>' +
+      diffBadge(diff) +
+      '</div>' +
+      '<div class="pitem-desc">' + issue.description + '</div>' +
+      '<div class="pitem-bottom">' +
+      '<span class="pitem-impact">' + estimateImpact(issue) + '</span>' +
+      '</div>' +
+      '</div>';
+    if (isUrgent) urgentHtml += item;
+    else if (isWeek) weekHtml += item;
+    else monthHtml += item;
+  });
+  var tab2 = (urgentHtml ? '<div class="priority-header ph-urgent">🔥 Urgente — Resolver en las próximas 24h</div>' + urgentHtml : '') +
+    (weekHtml ? '<div class="priority-header ph-week" style="margin-top:16px">⚡ Esta semana</div>' + weekHtml : '') +
+    (monthHtml ? '<div class="priority-header ph-month" style="margin-top:16px">📅 Este mes</div>' + monthHtml : '') +
+    '<div class="blurred-section" style="margin-top:16px">' +
+    '<div class="blurred-items"><div class="blurred-item"><div class="blurred-item-icon"></div><div class="blurred-item-text"><div class="blurred-line"></div><div class="blurred-line short"></div></div></div><div class="blurred-item"><div class="blurred-item-icon"></div><div class="blurred-item-text"><div class="blurred-line"></div><div class="blurred-line short"></div></div></div><div class="blurred-item"><div class="blurred-item-icon"></div><div class="blurred-item-text"><div class="blurred-line"></div><div class="blurred-line short"></div></div></div></div>' +
+    '<div class="blur-overlay"><span class="blur-lock">🔒</span><div class="blur-title">' + (data.hiddenIssuesCount||8) + ' problemas adicionales ocultos</div><div class="blur-sub">Obtenga la auditoría completa para verlos todos</div></div>' +
+    '</div>';
 
-  var oppsHtml = (data.opportunities || []).map(function(issue) {
-    return '<div class="issue-item">' + issueIcon(issue.type) +
-      '<div class="issue-content"><div class="issue-title">' + issue.title + '</div>' +
-      '<div class="issue-desc">' + issue.description + '</div>' +
-      impactBadge(issue.impact) + '</div></div>';
-  }).join('');
-
-  var qwHtml = (data.quickWins || []).map(function(w) {
-    return '<div class="quick-win">' + w + '</div>';
-  }).join('');
-
-  var blurredHtml = '';
-  for (var b = 0; b < 4; b++) {
-    blurredHtml += '<div class="blurred-item"><div class="blurred-item-icon"></div><div class="blurred-item-text"><div class="blurred-line"></div><div class="blurred-line short"></div></div></div>';
+  /* ── TAB 3: META TAGS ── */
+  var tab3 = '';
+  if (data.realMeta && data.realMeta.ok) {
+    var m = data.realMeta;
+    var tStatus = !m.title ? 'miss' : m.titleLength > 70 || m.titleLength < 20 ? 'warn' : 'ok';
+    var dStatus = !m.description ? 'miss' : m.descLength > 165 || m.descLength < 50 ? 'warn' : 'ok';
+    tab3 = '<div class="meta-analysis">' +
+      '<div class="meta-analysis-hdr">🔍 Meta tags extraídos del HTML real de su página</div>' +
+      metaRow('Title ('+ m.titleLength +' ch)', m.title ? '"' + m.title.slice(0,60) + (m.titleLength>60?'..."':'"') : '', tStatus) +
+      metaRow('Meta Description ('+ m.descLength +' ch)', m.description ? '"' + m.description.slice(0,80) + (m.descLength>80?'..."':'"') : '', dStatus) +
+      metaRow('H1 tags (' + m.h1Count + ')', m.h1Count > 0 ? '"' + (m.h1Texts[0]||'').slice(0,55) + '"' : '', m.h1Count===1?'ok':m.h1Count===0?'miss':'warn') +
+      metaRow('Canonical', m.canonical ? m.canonical.slice(0,50) : '', m.canonical?'ok':'miss') +
+      metaRow('OG Title', m.ogTitle ? m.ogTitle.slice(0,50) : '', m.ogTitle?'ok':'miss') +
+      metaRow('OG Description', m.ogDescription ? m.ogDescription.slice(0,60) : '', m.ogDescription?'ok':'miss') +
+      metaRow('OG Image', m.ogImage ? 'Definida ✓' : '', m.ogImage?'ok':'miss') +
+      metaRow('Twitter Card', m.twitterCard||'', m.twitterCard?'ok':'miss') +
+      metaRow('Schema.org', m.hasSchema?'Presente ✓':'', m.hasSchema?'ok':'miss') +
+      metaRow('Imágenes sin ALT', m.imgNoAlt > 0 ? (m.imgNoAlt + ' de ' + m.imgTotal + ' imágenes') : 'Todas tienen ALT ✓', m.imgNoAlt===0?'ok':m.imgNoAlt<4?'warn':'miss') +
+      metaRow('H2 tags', String(m.h2Count||0), m.h2Count>0?'ok':'warn') +
+      metaRow('Idioma declarado', m.lang||'', m.lang?'ok':'miss') +
+      '</div>';
+  } else {
+    tab3 = '<div style="text-align:center;padding:32px;color:var(--text2);font-size:0.9rem"><div style="font-size:2rem;margin-bottom:12px">🔒</div>No se pudo extraer el HTML real de esta página (CORS o sin proxy disponible).<br>Los datos de Lighthouse siguen siendo reales.</div>';
+  }
+  if (data.lighthouseScores) {
+    var ls2 = data.lighthouseScores;
+    tab3 += '<div style="font-size:0.8rem;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin:20px 0 10px">Lighthouse Scores de Referencia</div>' +
+      '<div class="lh-scores">' + lhScoreCard('Performance', ls2.performance) + lhScoreCard('SEO', ls2.seo) + lhScoreCard('Accesibilidad', ls2.accessibility) + lhScoreCard('Best Practices', ls2.bestPractices) + '</div>';
   }
 
-  var html = '<div class="result-header">' +
-    circ +
-    '<div class="result-meta">' +
-    '<div class="result-domain">' + (data.domain || 'Su sitio') + '</div>' +
-    '<div class="result-type">' + (data.businessType || 'Sitio web') + '</div>' +
-    '<div class="result-date">Analizado: ' + dateStr + '</div>' +
-    dsBadge +
-    '<div class="result-hidden" style="margin-top:8px">🔒 ' + (data.hiddenIssuesCount || 12) + ' problemas adicionales ocultos</div>' +
-    '</div></div>' +
+  /* ── TAB 4: PLAN DE ACCIÓN ── */
+  var ps = data.lighthouseScores;
+  var dPerf = ps ? ps.performance : 50;
+  var mPerf = ps ? ps.mobilePerf : 50;
 
-    lhHtml +
-    cwvHtml +
-    metaHtml +
+  var compareHtml = '';
+  if (ps) {
+    compareHtml = '<div style="font-size:0.8rem;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">Comparativa Desktop vs Móvil</div>' +
+      '<div class="compare-grid">' +
+      compareBar('Performance', dPerf, mPerf, lhColor(dPerf), lhColor(mPerf)) +
+      compareBar('SEO', ps.seo, ps.seo, lhColor(ps.seo), lhColor(ps.seo)) +
+      compareBar('Accesibilidad', ps.accessibility, ps.accessibility, lhColor(ps.accessibility), lhColor(ps.accessibility)) +
+      '</div>';
+  }
 
-    '<div class="issues-title" style="margin-bottom:12px;margin-top:4px"><span style="color:var(--text2)">●</span> Métricas detalladas</div>' +
-    '<div class="metrics-grid">' + metricsHtml + '</div>' +
+  var qwHtml = (data.quickWins||[]).map(function(w,i){
+    return '<div class="pitem"><div class="pitem-top"><div class="pitem-title">💡 ' + w + '</div>' + diffBadge('easy') + '</div></div>';
+  }).join('');
 
-    '<div class="issues-section">' +
-    '<div class="issues-title"><span style="color:var(--red)">●</span> Problemas críticos detectados</div>' +
-    criticalHtml + '</div>' +
+  var oppsHtml = (data.opportunities||[]).map(function(o){
+    return '<div class="pitem"><div class="pitem-top"><div class="pitem-title">🚀 ' + o.title + '</div>' + diffBadge('med') + '</div><div class="pitem-desc">' + o.description + '</div></div>';
+  }).join('');
 
-    '<div class="issues-section">' +
-    '<div class="issues-title"><span style="color:var(--yellow)">●</span> Advertencias</div>' +
-    warningsHtml + '</div>' +
+  var kwHtml = '<div class="opps-section" style="margin-bottom:16px">' +
+    '<div style="font-size:0.8rem;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">Oportunidad de Keyword Principal</div>' +
+    '<div class="opps-keyword"><div><div class="opps-kw-label">Keyword con mayor potencial en Colombia</div><div class="opps-kw-value">' + (data.topKeywordOpportunity||'su negocio colombia') + '</div></div></div>' +
+    '<div class="opps-traffic">Tráfico mensual estimado perdido: <strong>' + (data.estimatedMonthlyTrafficLost||800).toLocaleString('es-CO') + ' visitas/mes</strong></div>' +
+    '</div>';
 
-    '<div class="opps-section">' +
-    '<div class="issues-title" style="margin-bottom:14px"><span style="color:var(--accent)">●</span> Oportunidades detectadas</div>' +
-    '<div class="opps-keyword"><div><div class="opps-kw-label">Keyword de mayor oportunidad para su negocio</div><div class="opps-kw-value">' + (data.topKeywordOpportunity || 'su negocio Colombia') + '</div></div></div>' +
-    '<div class="opps-traffic">Tráfico mensual estimado que está perdiendo: <strong>' + (data.estimatedMonthlyTrafficLost || 800).toLocaleString('es-CO') + ' visitas/mes</strong></div>' +
-    '<div style="font-size:0.8rem;color:var(--text2);margin-bottom:8px;font-weight:600">Acciones rápidas para empezar:</div>' +
-    '<div class="quick-wins">' + qwHtml + '</div>' +
-    oppsHtml +
-    '</div>' +
+  var tab4 = compareHtml + kwHtml +
+    '<div style="font-size:0.8rem;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">Quick Wins — Implementar hoy</div>' + qwHtml +
+    '<div style="font-size:0.8rem;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin:16px 0 10px">Oportunidades de Crecimiento</div>' + oppsHtml;
 
-    '<div class="blurred-section">' +
-    '<div class="blurred-items">' + blurredHtml + '</div>' +
-    '<div class="blur-overlay">' +
-    '<span class="blur-lock">🔒</span>' +
-    '<div class="blur-title">' + (data.hiddenIssuesCount || 12) + ' problemas adicionales identificados</div>' +
-    '<div class="blur-sub">Obtenga la auditoría completa para ver todos los problemas y su plan de corrección</div>' +
-    '</div></div>' +
-
-    '<div class="upsell-card">' +
-    '<div class="upsell-title">Su sitio tiene <span style="color:var(--red)">' + ((data.criticalIssues || []).length + (data.warnings || []).length + (data.hiddenIssuesCount || 12)) + ' problemas</span> que están frenando su crecimiento</div>' +
-    '<div class="upsell-sub">Está perdiendo aproximadamente <strong style="color:var(--text)">' + (data.estimatedMonthlyTrafficLost || 800).toLocaleString('es-CO') + ' visitas/mes</strong> que van directamente a sus competidores</div>' +
+  /* ── UPSELL (siempre visible debajo de tabs) ── */
+  var upsellHtml = '<div class="upsell-card" style="margin-top:24px">' +
+    '<div class="upsell-title">Su sitio tiene <span style="color:var(--red)">' + totalProbs + ' problemas</span> que están frenando su crecimiento</div>' +
+    '<div class="upsell-sub">Con las correcciones su sitio podría llegar a <strong style="color:var(--accent)">' + potential + '/100</strong> — actualmente está perdiendo <strong style="color:var(--text)">' + (data.estimatedMonthlyTrafficLost||800).toLocaleString('es-CO') + ' visitas/mes</strong></div>' +
     '<div class="upsell-features">' +
-    '<div class="upsell-feat"><span class="upsell-feat-icon">✓</span> Análisis completo de 40+ métricas técnicas</div>' +
-    '<div class="upsell-feat"><span class="upsell-feat-icon">✓</span> Estudio de ' + (data.competitorCount || 4) + ' competidores directos de su negocio</div>' +
-    '<div class="upsell-feat"><span class="upsell-feat-icon">✓</span> Keywords con mayor potencial de conversión en Colombia</div>' +
-    '<div class="upsell-feat"><span class="upsell-feat-icon">✓</span> Plan de acción paso a paso priorizado por impacto</div>' +
-    '<div class="upsell-feat"><span class="upsell-feat-icon">✓</span> Entrega en PDF en menos de 48 horas hábiles</div>' +
+    '<div class="upsell-feat"><span class="upsell-feat-icon">✓</span> Análisis completo 40+ métricas con plan de corrección paso a paso</div>' +
+    '<div class="upsell-feat"><span class="upsell-feat-icon">✓</span> Estudio de ' + (data.competitorCount||4) + ' competidores directos con análisis de brechas</div>' +
+    '<div class="upsell-feat"><span class="upsell-feat-icon">✓</span> Keywords de alta conversión específicas para su sector en Colombia</div>' +
+    '<div class="upsell-feat"><span class="upsell-feat-icon">✓</span> Entrega en PDF profesional en menos de 48 horas</div>' +
     '</div>' +
-    '<div class="upsell-pricing">' +
-    '<span class="price-old">$580.000</span>' +
-    '<span class="price-new">$290.000</span>' +
-    '<span class="price-currency">COP</span>' +
-    '</div>' +
+    '<div class="upsell-pricing"><span class="price-old">$580.000</span><span class="price-new">$290.000</span><span class="price-currency">COP</span></div>' +
     '<div class="upsell-btns">' +
     '<button class="btn-primary" onclick="alert(\'¡Gracias! Nos pondremos en contacto en menos de 2 horas hábiles.\')">Obtener auditoría completa — $290.000 COP</button>' +
     '<button class="btn-secondary" onclick="downloadReport()">📄 Descargar reporte básico (gratis)</button>' +
     '</div>' +
     '<div class="guarantee"><span class="guarantee-icon">🛡️</span> Si no encuentra valor en el reporte, le devolvemos su dinero. Sin preguntas.</div>' +
-    '</div>' +
+    '</div>';
 
-    '<button class="analyze-again-btn" onclick="resetAudit()">↩ Analizar otro sitio web</button>';
+  /* ── ASSEMBLE ── */
+  var html =
+    '<div class="result-hdr-clean">' +
+    '<div class="rh-domain">' + (data.domain||'Su sitio') + '</div>' +
+    '<div class="rh-date">Analizado ' + dateStr + '</div>' +
+    '</div>' +
+    '<div class="results-tabs">' +
+    '<button class="rtab active" onclick="switchTab(\'resumen\',this)">📊 Resumen</button>' +
+    '<button class="rtab" onclick="switchTab(\'problemas\',this)">🔴 Problemas (' + totalVisible + ')</button>' +
+    '<button class="rtab" onclick="switchTab(\'meta\',this)">🏷 Meta Tags</button>' +
+    '<button class="rtab" onclick="switchTab(\'plan\',this)">✅ Plan de Acción</button>' +
+    '</div>' +
+    '<div class="tab-panel active" id="tab-resumen">' + tab1 + '</div>' +
+    '<div class="tab-panel" id="tab-problemas">' + tab2 + '</div>' +
+    '<div class="tab-panel" id="tab-meta">' + tab3 + '</div>' +
+    '<div class="tab-panel" id="tab-plan">' + tab4 + '</div>' +
+    upsellHtml +
+    '<button class="analyze-again-btn" style="margin-top:12px" onclick="resetAudit()">↩ Analizar otro sitio</button>';
 
   resultsDiv.innerHTML = html;
   resultsDiv.style.display = 'block';
 
+  var counterEl = document.getElementById('scoreCounter');
+  if (counterEl) animateCounter(counterEl, data.score, 900);
+
   setTimeout(function() {
-    resultsDiv.querySelectorAll('.metric-bar-fill, .progress-fill').forEach(function(el) {
+    resultsDiv.querySelectorAll('.metric-bar-fill, .progress-fill, .cbar-fill').forEach(function(el) {
       var w = el.getAttribute('data-width');
       if (w) el.style.width = w + '%';
     });
-  }, 120);
+  }, 150);
+}
+
+function compareBar(label, desktop, mobile, colD, colM) {
+  return '<div class="cbar"><span class="cbar-lbl">' + label + '</span>' +
+    '<div style="flex:1;display:flex;flex-direction:column;gap:5px">' +
+    '<div style="display:flex;align-items:center;gap:8px"><span style="font-size:0.65rem;color:var(--muted);min-width:54px">Desktop</span><div class="cbar-track"><div class="cbar-fill" data-width="' + desktop + '" style="background:' + colD + '"></div></div><span class="cbar-val" style="color:' + colD + '">' + desktop + '</span></div>' +
+    '<div style="display:flex;align-items:center;gap:8px"><span style="font-size:0.65rem;color:var(--muted);min-width:54px">Móvil</span><div class="cbar-track"><div class="cbar-fill" data-width="' + mobile + '" style="background:' + colM + '"></div></div><span class="cbar-val" style="color:' + colM + '">' + mobile + '</span></div>' +
+    '</div></div>';
 }
 
 function buildScoreCircle(score, color) {
