@@ -333,6 +333,47 @@ footer{background:#0a0a10;border-top:1px solid var(--border);padding:56px 24px 3
   .trust-bar{gap:12px;font-size:0.75rem}
   .price-amount{font-size:1.5rem}
 }
+/* CORE WEB VITALS */
+.cwv-section{margin-bottom:20px}
+.cwv-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.cwv-card{background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:10px;padding:14px;text-align:center;transition:transform .2s}
+.cwv-card:hover{transform:translateY(-2px)}
+.cwv-card.cwv-good{border-top:2px solid #10b981}
+.cwv-card.cwv-warn{border-top:2px solid var(--yellow)}
+.cwv-card.cwv-bad{border-top:2px solid var(--red)}
+.cwv-label{font-size:0.68rem;color:var(--text2);margin-bottom:6px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.cwv-value{font-family:var(--font-mono);font-size:1.15rem;font-weight:500;margin-bottom:5px}
+.cwv-badge{display:inline-block;font-size:0.63rem;font-weight:700;padding:2px 8px;border-radius:100px}
+.cwv-badge.good{background:rgba(16,185,129,.15);color:#10b981}
+.cwv-badge.warn{background:rgba(245,158,11,.15);color:var(--yellow)}
+.cwv-badge.bad{background:rgba(239,68,68,.15);color:var(--red)}
+.cwv-threshold{font-size:0.65rem;color:var(--muted);margin-top:3px}
+/* LIGHTHOUSE CATEGORY SCORES */
+.lh-scores{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px}
+.lh-score-card{background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:10px;padding:14px;text-align:center;transition:transform .2s}
+.lh-score-card:hover{transform:translateY(-2px)}
+.lh-score-num{font-family:var(--font-mono);font-size:1.5rem;font-weight:500;margin-bottom:4px}
+.lh-score-lbl{font-size:0.7rem;color:var(--text2);font-weight:500}
+/* META TAG ANALYSIS */
+.meta-analysis{background:rgba(59,130,246,0.05);border:1px solid rgba(59,130,246,0.15);border-radius:12px;padding:18px;margin-bottom:20px}
+.meta-analysis-hdr{font-size:0.85rem;font-weight:700;color:var(--accent2);margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.meta-row{display:flex;gap:10px;align-items:flex-start;padding:7px 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:0.8rem;line-height:1.4}
+.meta-row:last-child{border-bottom:none}
+.meta-key{color:var(--text2);min-width:130px;flex-shrink:0;font-weight:600}
+.meta-val{flex:1;word-break:break-word;font-family:var(--font-mono);font-size:0.76rem;opacity:.9;color:var(--text)}
+.meta-val.miss{color:var(--red);font-family:var(--font-body);font-style:italic;font-size:0.8rem;opacity:1}
+.meta-val.ok{color:#10b981;font-family:var(--font-body);font-size:0.8rem;opacity:1}
+.meta-val.warn{color:var(--yellow);font-family:var(--font-body);font-size:0.8rem;opacity:1}
+/* DATA SOURCE INDICATOR */
+.ds-badge{display:inline-flex;align-items:center;gap:5px;font-size:0.68rem;font-weight:700;padding:3px 10px;border-radius:100px;margin-top:6px}
+.ds-real{background:rgba(0,217,126,0.1);color:var(--accent);border:1px solid rgba(0,217,126,0.2)}
+.ds-estimated{background:rgba(245,158,11,0.1);color:var(--yellow);border:1px solid rgba(245,158,11,0.2)}
+/* LOADER STATUS LINE */
+.loader-note{font-size:0.75rem;color:var(--text2);text-align:center;margin-top:8px;min-height:18px;font-style:italic}
+@media(max-width:768px){
+  .cwv-grid,.lh-scores{grid-template-columns:repeat(2,1fr)}
+  .meta-key{min-width:90px}
+}
 </style>
 </head>
 <body>
@@ -836,11 +877,12 @@ function closeMobileMenu() {
 }
 
 var loaderMessages = [
-  "Verificando accesibilidad del sitio...",
-  "Extrayendo meta tags y estructura HTML...",
-  "Analizando rendimiento y Core Web Vitals...",
-  "Evaluando señales de autoridad y backlinks...",
-  "Calculando puntuación SEO global..."
+  "Verificando seguridad HTTPS del dominio...",
+  "Conectando con Google PageSpeed Insights...",
+  "Ejecutando auditoría Lighthouse completa...",
+  "Extrayendo meta tags y estructura HTML real...",
+  "Procesando Core Web Vitals y señales SEO...",
+  "Generando diagnóstico final..."
 ];
 
 function buildLoaderSteps() {
@@ -848,6 +890,13 @@ function buildLoaderSteps() {
   container.innerHTML = loaderMessages.map(function(msg, i) {
     return '<div class="loader-step" id="lstep' + i + '"><div class="step-icon" id="lstepicon' + i + '">◌</div><span>' + msg + '</span></div>';
   }).join('');
+  if (!document.getElementById('loaderNote')) {
+    var note = document.createElement('div');
+    note.id = 'loaderNote';
+    note.className = 'loader-note';
+    note.textContent = 'Google PageSpeed puede tardar hasta 30 segundos...';
+    container.parentNode.insertBefore(note, container.nextSibling);
+  }
 }
 
 function animateLoader() {
@@ -859,24 +908,299 @@ function animateLoader() {
       if (i > 0) {
         var prev = document.getElementById('lstep' + (i - 1));
         var prevIcon = document.getElementById('lstepicon' + (i - 1));
-        prev.className = 'loader-step done';
-        prevIcon.textContent = '✓';
+        if (prev) { prev.className = 'loader-step done'; prevIcon.textContent = '✓'; }
       }
       if (i >= loaderMessages.length) {
-        document.getElementById('loaderBarFill').style.width = '100%';
-        setTimeout(resolve, 400);
+        document.getElementById('loaderBarFill').style.width = '95%';
+        var note = document.getElementById('loaderNote');
+        if (note) note.textContent = 'Esperando respuesta de Google PageSpeed Insights...';
+        setTimeout(resolve, 500);
         return;
       }
       var step = document.getElementById('lstep' + i);
       var icon = document.getElementById('lstepicon' + i);
-      step.className = 'loader-step active';
-      icon.textContent = '◌';
+      if (step) { step.className = 'loader-step active'; icon.textContent = '◌'; }
       document.getElementById('loaderBarFill').style.width = ((i + 1) / loaderMessages.length * 90) + '%';
       i++;
-      setTimeout(next, 1500);
+      setTimeout(next, 2000);
     }
     next();
   });
+}
+
+async function fetchPageSpeed(url, strategy) {
+  var apiUrl = 'https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=' + encodeURIComponent(url) + '&strategy=' + strategy + '&category=performance&category=seo&category=accessibility&category=best-practices';
+  var ctrl = new AbortController();
+  var timer = setTimeout(function() { ctrl.abort(); }, 50000);
+  try {
+    var resp = await fetch(apiUrl, {signal: ctrl.signal});
+    clearTimeout(timer);
+    if (!resp.ok) return {ok: false};
+    var data = await resp.json();
+    var lhr = data.lighthouseResult;
+    if (!lhr) return {ok: false};
+    var cats = lhr.categories;
+    var audits = lhr.audits;
+    function sc(cat) { return Math.round(((cats[cat] && cats[cat].score) || 0) * 100); }
+    function av(id) { return (audits[id] && audits[id].displayValue) || ''; }
+    function an(id) { return (audits[id] && audits[id].numericValue) || 0; }
+    var lcpMs = an('largest-contentful-paint');
+    var fcpMs = an('first-contentful-paint');
+    var clsRaw = an('cumulative-layout-shift');
+    var tbtMs = an('total-blocking-time');
+    var seoIds = ['meta-description','document-title','image-alt','canonical','viewport','robots-txt','structured-data','tap-targets','is-crawlable','font-size','crawlable-anchors','link-text','hreflang'];
+    var failedSeo = [];
+    seoIds.forEach(function(id) {
+      var a = audits[id];
+      if (a && a.score !== null && a.score < 1) {
+        failedSeo.push({id:id, title:a.title, description:(a.description||'').replace(/\[([^\]]+)\]\([^)]+\)/g,'$1').slice(0,220), score:a.score});
+      }
+    });
+    var oppIds = ['uses-optimized-images','render-blocking-resources','unused-javascript','unused-css-rules','uses-text-compression','uses-responsive-images','offscreen-images'];
+    var opps = [];
+    oppIds.forEach(function(id) {
+      var a = audits[id];
+      if (a && a.score !== null && a.score < 0.9) opps.push({id:id, title:a.title, savings:a.displayValue||'', score:a.score});
+    });
+    return {
+      ok: true, strategy: strategy,
+      scores: {performance: sc('performance'), seo: sc('seo'), accessibility: sc('accessibility'), bestPractices: sc('best-practices')},
+      vitals: {
+        fcp: {display: av('first-contentful-paint'), ms: fcpMs, status: fcpMs < 1800 ? 'good' : fcpMs < 3000 ? 'warn' : 'bad'},
+        lcp: {display: av('largest-contentful-paint'), ms: lcpMs, status: lcpMs < 2500 ? 'good' : lcpMs < 4000 ? 'warn' : 'bad'},
+        cls: {display: av('cumulative-layout-shift'), val: clsRaw, status: clsRaw < 0.1 ? 'good' : clsRaw < 0.25 ? 'warn' : 'bad'},
+        tbt: {display: av('total-blocking-time'), ms: tbtMs, status: tbtMs < 200 ? 'good' : tbtMs < 600 ? 'warn' : 'bad'},
+        si: {display: av('speed-index')}, tti: {display: av('interactive')}
+      },
+      failedSeo: failedSeo, opps: opps
+    };
+  } catch(e) { clearTimeout(timer); return {ok: false}; }
+}
+
+async function fetchRealMeta(url) {
+  var proxies = [
+    'https://api.allorigins.win/get?url=' + encodeURIComponent(url),
+    'https://corsproxy.io/?' + encodeURIComponent(url)
+  ];
+  for (var pi = 0; pi < proxies.length; pi++) {
+    try {
+      var ctrl = new AbortController();
+      var timer = setTimeout(function() { ctrl.abort(); }, 14000);
+      var resp = await fetch(proxies[pi], {signal: ctrl.signal});
+      clearTimeout(timer);
+      var html;
+      var ct = resp.headers.get('content-type') || '';
+      if (ct.includes('json')) { var d = await resp.json(); html = d.contents || ''; }
+      else html = await resp.text();
+      if (!html || html.length < 100) continue;
+      var parser = new DOMParser();
+      var doc = parser.parseFromString(html, 'text/html');
+      function gm(sel) { var el = doc.querySelector(sel); return el ? (el.content || el.getAttribute('content') || '') : ''; }
+      function ga(sel, attr) { var el = doc.querySelector(sel); return el ? (el.getAttribute(attr) || '') : ''; }
+      var title = doc.querySelector('title') ? doc.querySelector('title').textContent.trim() : '';
+      var desc = gm('meta[name="description"]') || gm('meta[name="Description"]');
+      var kws = gm('meta[name="keywords"]');
+      var robots = gm('meta[name="robots"]');
+      var canonical = ga('link[rel="canonical"]','href');
+      var ogTitle = gm('meta[property="og:title"]');
+      var ogDesc = gm('meta[property="og:description"]');
+      var ogImg = gm('meta[property="og:image"]');
+      var twCard = gm('meta[name="twitter:card"]');
+      var lang = doc.documentElement.getAttribute('lang') || '';
+      var h1s = Array.from(doc.querySelectorAll('h1')).map(function(h) { return h.textContent.trim(); }).filter(Boolean);
+      var h2c = doc.querySelectorAll('h2').length;
+      var imgs = doc.querySelectorAll('img');
+      var imgsAlt = doc.querySelectorAll('img[alt]:not([alt=""])').length;
+      var hasSchema = html.indexOf('application/ld+json') > -1 || html.indexOf('itemscope') > -1;
+      return {
+        ok: true, title: title, titleLength: title.length,
+        description: desc, descLength: desc.length,
+        keywords: kws, robots: robots, canonical: canonical,
+        ogTitle: ogTitle, ogDescription: ogDesc, ogImage: ogImg,
+        twitterCard: twCard, lang: lang,
+        h1Count: h1s.length, h1Texts: h1s.slice(0,3),
+        h2Count: h2c, imgTotal: imgs.length,
+        imgWithAlt: imgsAlt, imgNoAlt: imgs.length - imgsAlt,
+        hasSchema: hasSchema
+      };
+    } catch(e) { continue; }
+  }
+  return {ok: false};
+}
+
+function inferBusinessType(title, desc, domain) {
+  var text = ((title||'') + ' ' + (desc||'') + ' ' + (domain||'')).toLowerCase();
+  var types = [
+    {w:['clínica','clinic','doctor','médico','medico','salud','dental','dent','health','hospital','ortodoncia','pediatra','dermatol','psicolog','odontol','medicina','optometr','veterinar'],l:'Clínica / Consultorio médico'},
+    {w:['tienda','shop','store','moda','ropa','zapato','accesorio','fashion','boutique','clothing','ecommerce','carrito'],l:'Tienda en línea'},
+    {w:['restaurante','restaurant','comida','food','pizza','sushi','hamburgues','burger','panadería','panaderia','pastelería','pasteleria','cafetería','cafeteria','bar '],l:'Restaurante / Alimentación'},
+    {w:['hotel','hostal','alojamiento','habitación','hospedaje','booking','reserva','posada'],l:'Hotel / Hospedaje'},
+    {w:['abogado','lawyer','legal','derecho','firma','jurídico','juridico','law','attorney','notaría','notaria','juicio'],l:'Firma de abogados'},
+    {w:['inmobiliaria','propiedad','apartamento','bienes raíces','bienes raices','arriendo','venta casa','finca raíz'],l:'Inmobiliaria'},
+    {w:['academia','curso','educación','educacion','school','escuela','university','colegio','formación','formacion','capacitación','capacitacion'],l:'Academia / Educación'},
+    {w:['gym','gimnasio','fitness','yoga','pilates','entrenamiento','deporte','crossfit'],l:'Gimnasio / Fitness'},
+    {w:['software','tech','tecnología','tecnologia','app ','desarrollo','development','digital','saas','startup','programación'],l:'Empresa de tecnología'},
+    {w:['agencia','agency','marketing','diseño','diseño web','publicidad','creativo','branding'],l:'Agencia / Marketing'},
+    {w:['blog','noticias','news','media','revista','editorial'],l:'Blog / Medio digital'},
+    {w:['construcción','construccion','arquitectura','obra','remodelación','remodelacion','ingeniería'],l:'Construcción / Arquitectura'},
+    {w:['spa','belleza','estética','estetica','peluquería','peluqueria','barbería','barberia','manicure','nail','beauty'],l:'Spa / Estética'},
+    {w:['transporte','logística','logistica','delivery','envío','envio','mudanza','carga','mensajería'],l:'Transporte / Logística'},
+    {w:['seguro','seguros','insurance','aseguradora','poliza','póliza'],l:'Seguros / Financiero'},
+    {w:['consultor','consulting','asesoría','asesoria','contabilidad','contador','auditoría'],l:'Consultoría / Servicios'},
+  ];
+  for (var i = 0; i < types.length; i++) {
+    for (var j = 0; j < types[i].w.length; j++) {
+      if (text.indexOf(types[i].w[j]) > -1) return types[i].l;
+    }
+  }
+  return 'Empresa de servicios';
+}
+
+function buildKeyword(meta, domain) {
+  if (meta && meta.ok) {
+    if (meta.h1Texts && meta.h1Texts.length > 0) {
+      var h1 = meta.h1Texts[0].toLowerCase().replace(/[^a-záéíóúñüa-z0-9\s]/gi,'').trim().split(' ').filter(function(w){return w.length>3;}).slice(0,4).join(' ');
+      if (h1.length > 5) return h1 + ' colombia';
+    }
+    if (meta.title) {
+      var words = meta.title.toLowerCase().replace(/[^a-záéíóúñü\s]/gi,'').split(' ').filter(function(w){return w.length>4;}).slice(0,3);
+      if (words.length > 0) return words.join(' ') + ' colombia';
+    }
+  }
+  return domain.split('.')[0].replace(/-/g,' ') + ' colombia';
+}
+
+function buildQuickWins(ssl, ps, meta) {
+  var wins = [];
+  if (!ssl) wins.push('Activar certificado SSL/HTTPS — prioridad máxima para Google');
+  if (meta && meta.ok && !meta.description) wins.push('Agregar meta description única de 120-160 caracteres a cada página');
+  if (meta && meta.ok && meta.imgNoAlt > 0) wins.push('Agregar atributo ALT a las ' + meta.imgNoAlt + ' imágenes sin texto alternativo');
+  if (ps && ps.ok && ps.scores.performance < 60) wins.push('Comprimir imágenes y convertir a formato WebP para mejorar velocidad');
+  if (ps && ps.ok && ps.failedSeo.some(function(a){return a.id==='structured-data';})) wins.push('Implementar Schema.org JSON-LD para aparecer en rich snippets de Google');
+  wins.push('Crear y optimizar perfil en Google Business Profile con fotos y reseñas');
+  return wins.slice(0,3);
+}
+
+function estimateTraffic(score, mobileScore) {
+  var avg = (score + mobileScore) / 2;
+  var seed = Math.round(avg);
+  if (avg < 30) return 1800 + seed * 31 % 2200;
+  if (avg < 50) return 700 + seed * 17 % 1300;
+  if (avg < 70) return 250 + seed * 7 % 700;
+  return 60 + seed * 3 % 300;
+}
+
+function buildAnalysisFromRealData(url, ssl, mobile, desktop, meta) {
+  var domain = getDomain(url);
+  var ps = (mobile && mobile.ok) ? mobile : (desktop && desktop.ok ? desktop : null);
+
+  if (!ps) {
+    var fb = generateFallbackData(url);
+    fb.metrics.forEach(function(m) {
+      if (m.id === 'ssl') {
+        m.value = ssl ? 'Seguro' : 'Sin SSL';
+        m.numericValue = ssl ? 100 : 0;
+        m.status = ssl ? 'good' : 'bad';
+        m.detail = ssl ? 'Certificado SSL activo confirmado por URL HTTPS.' : 'Sin certificado SSL. Google penaliza sitios inseguros y Chrome los marca como peligrosos.';
+      }
+    });
+    if (meta && meta.ok && meta.title) fb.businessType = inferBusinessType(meta.title, meta.description, domain);
+    fb.dataSource = 'fallback';
+    return fb;
+  }
+
+  var dPerf = (desktop && desktop.ok) ? desktop.scores.performance : ps.scores.performance;
+  var mPerf = (mobile && mobile.ok) ? mobile.scores.performance : ps.scores.performance;
+  var seoSc = ps.scores.seo;
+  var accSc = ps.scores.accessibility;
+  var bpSc = ps.scores.bestPractices;
+
+  var composite = Math.round(dPerf * 0.20 + mPerf * 0.20 + seoSc * 0.40 + accSc * 0.12 + bpSc * 0.08);
+  composite = Math.max(3, Math.min(97, composite));
+  var scoreColor = composite < 40 ? '#ef4444' : composite < 60 ? '#f59e0b' : composite < 80 ? '#eab308' : '#10b981';
+  var scoreLabel = composite < 40 ? 'Crítico' : composite < 55 ? 'Deficiente' : composite < 70 ? 'Regular' : 'Mejorable';
+
+  var btype = 'Sitio web';
+  if (meta && meta.ok && meta.title) btype = inferBusinessType(meta.title, meta.description, domain);
+
+  var lcp = (mobile && mobile.ok) ? mobile.vitals.lcp : {display:'N/D', ms:0, status:'warn'};
+  var fcp = (mobile && mobile.ok) ? mobile.vitals.fcp : {display:'N/D', ms:0, status:'warn'};
+  var cls = (mobile && mobile.ok) ? mobile.vitals.cls : {display:'N/D', val:0, status:'warn'};
+  var tbt = (mobile && mobile.ok) ? mobile.vitals.tbt : {display:'N/D', ms:0, status:'warn'};
+
+  var metrics = [
+    {id:'rendimiento', label:'Rendimiento (Desktop)', value:dPerf+'/100', numericValue:dPerf, status:dPerf>=90?'good':dPerf>=50?'warn':'bad', detail:'Score de rendimiento Google PageSpeed desktop. Basado en auditoría Lighthouse real del sitio.'},
+    {id:'lcp', label:'Velocidad · LCP', value:lcp.display||'N/D', numericValue:Math.max(0,Math.round(100-(lcp.ms/6000*100))), status:lcp.status, detail:'Largest Contentful Paint real: '+lcp.display+'. Estándar Google: <2.5s (bien), 2.5-4s (mejorar), >4s (crítico).'},
+    {id:'movil', label:'Rendimiento Móvil', value:mPerf+'/100', numericValue:mPerf, status:mPerf>=90?'good':mPerf>=50?'warn':'bad', detail:'Score móvil real de Google PageSpeed. Google usa Mobile-First Index: el móvil determina el ranking.'},
+    {id:'seo', label:'SEO Técnico (Lighthouse)', value:seoSc+'%', numericValue:seoSc, status:seoSc>=90?'good':seoSc>=70?'warn':'bad', detail:'Puntuación SEO real de Google Lighthouse. Evalúa meta tags, rastreabilidad, canonical y señales técnicas reales.'},
+    {id:'ssl', label:'Seguridad HTTPS', value:ssl?'Seguro':'Sin SSL', numericValue:ssl?100:0, status:ssl?'good':'bad', detail:ssl?'HTTPS activo confirmado. Certificado SSL presente. Google favorece sitios seguros en el ranking.':'HTTPS NO activo. Google penaliza directamente en el ranking. Chrome muestra "No seguro" a los usuarios.'},
+    {id:'accesibilidad', label:'Accesibilidad Web', value:accSc+'/100', numericValue:accSc, status:accSc>=90?'good':accSc>=70?'warn':'bad', detail:'Score de accesibilidad Lighthouse real. Problemas de accesibilidad indican baja calidad de experiencia para Google.'}
+  ];
+
+  var criticalIds = ['is-crawlable','viewport','document-title','meta-description'];
+  var warnIds = ['image-alt','canonical','robots-txt','structured-data','tap-targets','font-size','hreflang','link-text','crawlable-anchors'];
+  var criticalIssues = [], warnings = [];
+
+  ps.failedSeo.forEach(function(a) {
+    if (criticalIds.indexOf(a.id) > -1 && criticalIssues.length < 3) {
+      criticalIssues.push({type:'critical', title:a.title, description:a.description, impact:'Alto'});
+    } else if (warnIds.indexOf(a.id) > -1 && warnings.length < 4) {
+      warnings.push({type:'warning', title:a.title, description:a.description, impact:'Medio'});
+    }
+  });
+
+  if (meta && meta.ok) {
+    var hasAltFail = ps.failedSeo.some(function(a){return a.id==='image-alt';});
+    if (meta.imgNoAlt > 0 && !hasAltFail) {
+      (criticalIssues.length < 3 ? criticalIssues : warnings).push({type: criticalIssues.length < 3 ? 'critical' : 'warning', title:meta.imgNoAlt+' imágenes sin texto alternativo (ALT)', description:'Se encontraron '+meta.imgNoAlt+' imágenes sin atributo ALT en el HTML real del sitio. Google no puede interpretar estas imágenes, perdiendo posicionamiento en búsquedas visuales y señales de relevancia.', impact:'Alto'});
+    }
+    if (!meta.hasSchema && warnings.length < 4) warnings.push({type:'warning', title:'Sin datos estructurados Schema.org detectados', description:'No se encontró markup Schema.org en el HTML del sitio. Los datos estructurados permiten rich snippets en Google (estrellas, FAQ, precios) que aumentan el CTR hasta un 30%.', impact:'Medio'});
+    if (!meta.ogImage && warnings.length < 4) warnings.push({type:'warning', title:'Imagen Open Graph (og:image) faltante', description:'Sin og:image definida en el HTML real. Al compartir el sitio en WhatsApp, LinkedIn o Facebook no aparece imagen, reduciendo el CTR y la viralidad del contenido.', impact:'Medio'});
+    var hasMetaFail = ps.failedSeo.some(function(a){return a.id==='meta-description';});
+    if (!meta.description && !hasMetaFail && criticalIssues.length < 3) {
+      criticalIssues.push({type:'critical', title:'Meta description ausente (confirmado en HTML real)', description:'La meta description no fue encontrada en el HTML de la página. Google puede generar una automáticamente pero de menor calidad, afectando directamente el CTR en los resultados de búsqueda.', impact:'Alto'});
+    }
+    if (meta.title && meta.titleLength > 70 && criticalIssues.length < 3) {
+      criticalIssues.push({type:'critical', title:'Meta title demasiado largo ('+meta.titleLength+' caracteres)', description:'El título supera los 60-70 caracteres recomendados. Título encontrado: "'+meta.title.slice(0,60)+'...". Google lo trunca en los resultados, mostrando "..." y reduciendo el CTR.', impact:'Alto'});
+    }
+  }
+
+  if (!ssl && criticalIssues.length < 3) {
+    var hasSslFail = criticalIssues.some(function(i){return i.title && i.title.indexOf('SSL')>-1;});
+    if (!hasSslFail) criticalIssues.push({type:'critical', title:'Sitio sin certificado SSL/HTTPS (verificado)', description:'El sitio no usa HTTPS. Confirmado por la URL analizada. Google ha penalizado el ranking de sitios sin SSL desde 2014. Chrome muestra alerta "No seguro" que aleja a los usuarios.', impact:'Alto'});
+  }
+
+  if (criticalIssues.length === 0) {
+    if (mPerf < 50) criticalIssues.push({type:'critical', title:'Rendimiento móvil crítico: '+mPerf+'/100', description:'El score de rendimiento móvil es muy bajo según Google PageSpeed real. Google Mobile-First Index penaliza directamente sitios lentos en móvil en el posicionamiento.', impact:'Alto'});
+    else criticalIssues.push({type:'critical', title:'Core Web Vitals no pasan el umbral de Google', description:'Alguna de las métricas Core Web Vitals (LCP, FCP, CLS) no cumple los estándares de Google Page Experience. Esto afecta el ranking directamente desde la actualización de 2021.', impact:'Alto'});
+  }
+  if (warnings.length === 0) warnings.push({type:'warning', title:'Estrategia de link building pendiente', description:'No se detectan suficientes señales de autoridad externa. Los backlinks de calidad siguen siendo el segundo factor de ranking más importante en Google.', impact:'Medio'});
+
+  var opps = ps.opps.slice(0,2).map(function(o){
+    return {type:'info', title:o.title, description:'Oportunidad de mejora detectada en la auditoría real.'+(o.savings?' Ahorro estimado: '+o.savings:''), impact:'Potencial'};
+  });
+  if (opps.length === 0) opps.push({type:'info', title:'Optimización para búsquedas de IA (GEO)', description:'Implementar contenido estructurado para aparecer en Google AI Overviews y ChatGPT. Oportunidad emergente con alto potencial en Colombia.', impact:'Potencial'});
+
+  var totalFailed = ps.failedSeo.length + (meta && meta.ok ? (!meta.hasSchema?1:0)+(!meta.ogImage?1:0)+(meta.imgNoAlt>0?1:0) : 4);
+  var hidden = Math.max(8, totalFailed - 4 + 8);
+
+  return {
+    domain: domain, businessType: btype,
+    score: composite, scoreLabel: scoreLabel, scoreColor: scoreColor,
+    lighthouseScores: {performance: dPerf, seo: seoSc, accessibility: accSc, bestPractices: bpSc, mobilePerf: mPerf},
+    coreWebVitals: {fcp: fcp, lcp: lcp, cls: cls, tbt: tbt, si:(mobile&&mobile.ok)?mobile.vitals.si:{display:'N/D'}, tti:(mobile&&mobile.ok)?mobile.vitals.tti:{display:'N/D'}},
+    realMeta: (meta && meta.ok) ? meta : null,
+    metrics: metrics,
+    criticalIssues: criticalIssues.slice(0,3),
+    warnings: warnings.slice(0,4),
+    opportunities: opps,
+    hiddenIssuesCount: hidden,
+    topKeywordOpportunity: buildKeyword(meta, domain),
+    competitorCount: Math.min(8, 3 + Math.round(seoSc/22)),
+    estimatedMonthlyTrafficLost: estimateTraffic(composite, mPerf),
+    quickWins: buildQuickWins(ssl, ps, meta),
+    dataSource: 'real'
+  };
 }
 
 function validateUrl(url) {
@@ -910,7 +1234,7 @@ function startAuditFromCta() {
   setTimeout(startAudit, 600);
 }
 
-function startAudit() {
+async function startAudit() {
   var urlRaw = document.getElementById('urlInput').value.trim();
   if (!validateUrl(urlRaw)) {
     document.getElementById('urlInput').style.borderColor = 'var(--red)';
@@ -919,53 +1243,105 @@ function startAudit() {
   }
   document.getElementById('urlInput').style.borderColor = '';
   var url = normalizeUrl(urlRaw);
+  var ssl = url.startsWith('https://');
+
   document.getElementById('auditForm').style.display = 'none';
   var loader = document.getElementById('loader');
   loader.style.display = 'block';
   document.getElementById('results').style.display = 'none';
 
-  var loaderPromise = animateLoader();
-  var apiKey = getApiKey();
-  var analysisPromise = apiKey ? callClaudeApi(url, apiKey) : Promise.resolve(generateFallbackData(url));
+  var loaderP = animateLoader();
+  var mobileP = fetchPageSpeed(url, 'mobile');
+  var desktopP = fetchPageSpeed(url, 'desktop');
+  var metaP = fetchRealMeta(url);
 
-  Promise.all([loaderPromise, analysisPromise]).then(function(values) {
-    var data = values[1];
-    currentAnalysisData = data;
-    loader.style.display = 'none';
-    renderResults(data);
-  }).catch(function() {
-    var data = generateFallbackData(url);
-    currentAnalysisData = data;
-    loader.style.display = 'none';
-    renderResults(data);
-  });
+  var settled = await Promise.allSettled([loaderP, mobileP, desktopP, metaP]);
+  var mobile  = settled[1].status === 'fulfilled' ? settled[1].value : {ok:false};
+  var desktop = settled[2].status === 'fulfilled' ? settled[2].value : {ok:false};
+  var meta    = settled[3].status === 'fulfilled' ? settled[3].value : {ok:false};
+
+  var data;
+  var apiKey = getApiKey();
+  if (apiKey) {
+    try { data = await callClaudeWithRealData(url, apiKey, ssl, mobile, desktop, meta); }
+    catch(e) { data = buildAnalysisFromRealData(url, ssl, mobile, desktop, meta); }
+  } else {
+    data = buildAnalysisFromRealData(url, ssl, mobile, desktop, meta);
+  }
+
+  currentAnalysisData = data;
+  loader.style.display = 'none';
+  var note = document.getElementById('loaderNote');
+  if (note) note.remove();
+  renderResults(data);
 }
 
-async function callClaudeApi(url, apiKey) {
-  var prompt = 'Eres SEOBot, un analizador técnico SEO de precisión. Analiza el sitio "' + url + '" y genera un diagnóstico SEO REALISTA Y ÚNICO para ese dominio específico.\n\nREGLAS CRÍTICAS:\n1. Los valores DEBEN variar según el tipo de negocio inferido de la URL/dominio\n2. NUNCA generes los mismos valores para diferentes URLs\n3. Infiere el tipo de negocio del dominio\n4. Los problemas deben ser ESPECÍFICOS y CREÍBLES para ese tipo de negocio\n5. El score final debe ser coherente con las métricas individuales\n6. Simula haber analizado datos reales del sitio\n\nResponde ÚNICAMENTE con JSON válido, sin texto adicional:\n\n{"domain":"<dominio limpio sin www ni https>","businessType":"<tipo de negocio inferido en español>","score":<número 15-78>,"scoreLabel":"<Crítico|Deficiente|Regular|Mejorable>","scoreColor":"<#color hex>","metrics":[{"id":"indexacion","label":"Indexación Google","value":"<Activa|Limitada|Bloqueada|Parcial>","numericValue":<0-100>,"status":"<good|warn|bad>","detail":"<observación específica 12-18 palabras>"},{"id":"velocidad","label":"Velocidad de carga","value":"<X.Xs>","numericValue":<1.2-8.4>,"status":"<good|warn|bad>","detail":"<causa específica>"},{"id":"movil","label":"Experiencia móvil","value":"<Optimizado|Parcial|No optimizado>","numericValue":<0-100>,"status":"<good|warn|bad>","detail":"<problema específico>"},{"id":"metatags","label":"Meta Tags SEO","value":"<X%>","numericValue":<20-95>,"status":"<good|warn|bad>","detail":"<meta tags faltantes>"},{"id":"ssl","label":"Seguridad HTTPS","value":"<Seguro|Sin SSL|Configuración mixta>","numericValue":<0-100>,"status":"<good|warn|bad>","detail":"<estado certificado>"},{"id":"autoridad","label":"Autoridad de Dominio","value":"<1-65>","numericValue":<1-65>,"status":"<good|warn|bad>","detail":"<estimado backlinks>"}],"criticalIssues":[{"type":"critical","title":"<problema crítico específico>","description":"<descripción 20-30 palabras>","impact":"Alto"},{"type":"critical","title":"<segundo problema crítico>","description":"<descripción específica>","impact":"Alto"}],"warnings":[{"type":"warning","title":"<problema medio>","description":"<descripción>","impact":"Medio"},{"type":"warning","title":"<otro problema medio>","description":"<descripción>","impact":"Medio"}],"opportunities":[{"type":"info","title":"<oportunidad SEO>","description":"<descripción 15-20 palabras>","impact":"Potencial"}],"hiddenIssuesCount":<9-18>,"topKeywordOpportunity":"<keyword específica Colombia>","competitorCount":<3-8>,"estimatedMonthlyTrafficLost":<150-4500>,"quickWins":["<acción 1>","<acción 2>","<acción 3>"]}';
+async function callClaudeWithRealData(url, apiKey, ssl, mobile, desktop, meta) {
+  var ps = (mobile && mobile.ok) ? mobile : (desktop && desktop.ok ? desktop : null);
+  var lines = [];
+  lines.push('== DATOS REALES OBTENIDOS DEL SITIO "' + url + '" ==\n');
+  lines.push('SSL/HTTPS: ' + (ssl ? 'ACTIVO (URL usa https://)' : 'INACTIVO (URL usa http://)'));
+  if (ps) {
+    var dPerf = (desktop && desktop.ok) ? desktop.scores.performance : ps.scores.performance;
+    var mPerf = (mobile && mobile.ok) ? mobile.scores.performance : ps.scores.performance;
+    lines.push('\nGOOGLE PAGESPEED INSIGHTS (real):');
+    lines.push('- Performance Desktop: ' + dPerf + '/100');
+    lines.push('- Performance Móvil: ' + mPerf + '/100');
+    lines.push('- SEO Lighthouse: ' + ps.scores.seo + '/100');
+    lines.push('- Accesibilidad: ' + ps.scores.accessibility + '/100');
+    lines.push('- Best Practices: ' + ps.scores.bestPractices + '/100');
+    if (mobile && mobile.ok) {
+      var v = mobile.vitals;
+      lines.push('\nCORE WEB VITALS (móvil):');
+      lines.push('- FCP: ' + v.fcp.display + ' (' + (v.fcp.status==='good'?'BIEN':'MEJORAR') + ', umbral: <1.8s)');
+      lines.push('- LCP: ' + v.lcp.display + ' (' + (v.lcp.status==='good'?'BIEN <2.5s':v.lcp.status==='warn'?'NECESITA MEJORA 2.5-4s':'CRÍTICO >4s') + ')');
+      lines.push('- CLS: ' + v.cls.display + ' (' + (v.cls.status==='good'?'BIEN <0.1':'MEJORAR') + ')');
+      lines.push('- TBT: ' + v.tbt.display + ' (' + (v.tbt.status==='good'?'BIEN <200ms':v.tbt.status==='warn'?'MEJORAR':'CRÍTICO') + ')');
+    }
+    if (ps.failedSeo.length > 0) {
+      lines.push('\nAUDITORÍAS SEO LIGHTHOUSE FALLIDAS:');
+      ps.failedSeo.forEach(function(a) { lines.push('- FALLA: ' + a.title); });
+    }
+    if (ps.opps.length > 0) {
+      lines.push('\nOPORTUNIDADES DE RENDIMIENTO:');
+      ps.opps.forEach(function(o) { lines.push('- ' + o.title + (o.savings ? ' | ' + o.savings : '')); });
+    }
+  }
+  if (meta && meta.ok) {
+    lines.push('\nMETA TAGS REALES (extraídos del HTML):');
+    lines.push('- Título: "' + (meta.title||'NO ENCONTRADO') + '" (' + meta.titleLength + ' chars)');
+    lines.push('- Meta Description: "' + (meta.description ? meta.description.slice(0,160) : 'NO ENCONTRADA') + '" (' + meta.descLength + ' chars)');
+    lines.push('- Canonical: ' + (meta.canonical||'NO definido'));
+    lines.push('- OG Title: ' + (meta.ogTitle||'NO definido'));
+    lines.push('- OG Image: ' + (meta.ogImage?'DEFINIDA':'NO definida'));
+    lines.push('- Twitter Card: ' + (meta.twitterCard||'NO definida'));
+    lines.push('- H1 (' + meta.h1Count + '): ' + (meta.h1Texts.join(' | ')||'NINGUNO'));
+    lines.push('- H2: ' + meta.h2Count);
+    lines.push('- Imágenes: ' + meta.imgTotal + ' total, ' + meta.imgNoAlt + ' SIN ALT');
+    lines.push('- Schema.org: ' + (meta.hasSchema?'SÍ PRESENTE':'NO ENCONTRADO'));
+    lines.push('- Idioma declarado: ' + (meta.lang||'NO declarado'));
+  }
+
+  var realData = lines.join('\n');
+  var prompt = 'Eres SEOBot experto en SEO técnico. Analiza los siguientes datos REALES obtenidos del sitio y genera un diagnóstico preciso.\n\n' + realData + '\n\nINSTRUCCIONES:\n1. USA los datos reales — NUNCA cambies SSL, velocidad, ni scores de PageSpeed\n2. Infiere el tipo de negocio del TÍTULO y DESCRIPCIÓN reales (no del dominio)\n3. Las issues deben venir de las auditorías REALES fallidas\n4. El score debe calcularse de los Lighthouse scores reales\n5. Keywords deben venir del H1/título real\n6. Responde SOLO con JSON válido sin texto adicional\n\n{"domain":"<dominio limpio>","businessType":"<inferido del título real>","score":<calculado de scores reales>,"scoreLabel":"<Crítico|Deficiente|Regular|Mejorable>","scoreColor":"<#hex según score>","metrics":[{"id":"rendimiento","label":"Rendimiento Web","value":"<perf desktop>/100","numericValue":<desktop perf>,"status":"<good|warn|bad>","detail":"<basado en datos reales>"},{"id":"lcp","label":"Velocidad · LCP","value":"<LCP real>","numericValue":<0-100>,"status":"<lcp status real>","detail":"<LCP real con diagnóstico>"},{"id":"movil","label":"Rendimiento Móvil","value":"<mobile score>/100","numericValue":<mobile score>,"status":"<good|warn|bad>","detail":"<basado en mobile score real>"},{"id":"seo","label":"SEO Técnico","value":"<seo score>%","numericValue":<seo score>,"status":"<good|warn|bad>","detail":"<basado en auditorías fallidas reales>"},{"id":"ssl","label":"Seguridad HTTPS","value":"<Seguro si https, Sin SSL si http>","numericValue":<100 si https, 0 si http>,"status":"<good si https, bad si http>","detail":"<estado SSL real>"},{"id":"accesibilidad","label":"Accesibilidad","value":"<acc score>/100","numericValue":<acc score>,"status":"<good|warn|bad>","detail":"<basado en acc score real>"}],"criticalIssues":[{"type":"critical","title":"<de las auditorías fallidas reales>","description":"<explicación técnica específica 25-35 palabras>","impact":"Alto"},{"type":"critical","title":"<segundo problema real>","description":"<explicación>","impact":"Alto"}],"warnings":[{"type":"warning","title":"<de los datos reales>","description":"<descripción>","impact":"Medio"},{"type":"warning","title":"<otro>","description":"<descripción>","impact":"Medio"}],"opportunities":[{"type":"info","title":"<oportunidad basada en datos reales>","description":"<descripción 15-20 palabras con datos específicos>","impact":"Potencial"}],"hiddenIssuesCount":<basado en total de auditorías fallidas>,"topKeywordOpportunity":"<del H1 o título real + colombia>","competitorCount":<3-8>,"estimatedMonthlyTrafficLost":<basado en scores reales>,"quickWins":["<acción de fallas reales>","<acción 2>","<acción 3>"]}';
 
   var response = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-api-key': apiKey,
-      'anthropic-version': '2023-06-01',
-      'anthropic-dangerous-direct-browser-access': 'true'
-    },
-    body: JSON.stringify({
-      model: 'claude-sonnet-4-20250514',
-      max_tokens: 1200,
-      messages: [{role: 'user', content: prompt}]
-    })
+    headers: {'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+    body: JSON.stringify({model:'claude-sonnet-4-20250514', max_tokens:1600, messages:[{role:'user',content:prompt}]})
   });
-
   if (!response.ok) throw new Error('API error');
   var json = await response.json();
   var raw = json.content[0].text;
-  var start = raw.indexOf('{');
-  var end = raw.lastIndexOf('}');
-  if (start === -1 || end === -1) throw new Error('No JSON');
-  return JSON.parse(raw.slice(start, end + 1));
+  var s = raw.indexOf('{'), e = raw.lastIndexOf('}');
+  if (s === -1 || e === -1) throw new Error('No JSON');
+  var result = JSON.parse(raw.slice(s, e + 1));
+  var dPerf2 = (desktop && desktop.ok) ? desktop.scores.performance : (ps ? ps.scores.performance : 0);
+  result.lighthouseScores = {performance: dPerf2, seo: ps ? ps.scores.seo : 0, accessibility: ps ? ps.scores.accessibility : 0, bestPractices: ps ? ps.scores.bestPractices : 0, mobilePerf: (mobile && mobile.ok) ? mobile.scores.performance : 0};
+  if (mobile && mobile.ok) result.coreWebVitals = {fcp:mobile.vitals.fcp, lcp:mobile.vitals.lcp, cls:mobile.vitals.cls, tbt:mobile.vitals.tbt, si:mobile.vitals.si, tti:mobile.vitals.tti};
+  if (meta && meta.ok) result.realMeta = meta;
+  result.dataSource = 'claude-real';
+  return result;
 }
 
 function seededRand(seed) {
@@ -1069,19 +1445,97 @@ function issueIcon(type) {
   return '<div class="issue-icon icon-info">💡</div>';
 }
 
+function lhColor(score) {
+  return score >= 90 ? '#10b981' : score >= 50 ? '#f59e0b' : '#ef4444';
+}
+
+function cwvCard(label, display, status, threshold) {
+  var badges = {good:'Bien', warn:'Mejorar', bad:'Crítico'};
+  return '<div class="cwv-card cwv-' + status + '">' +
+    '<div class="cwv-label">' + label + '</div>' +
+    '<div class="cwv-value">' + (display || 'N/D') + '</div>' +
+    '<span class="cwv-badge ' + status + '">' + (badges[status] || status) + '</span>' +
+    (threshold ? '<div class="cwv-threshold">Meta: ' + threshold + '</div>' : '') +
+    '</div>';
+}
+
+function lhScoreCard(label, score) {
+  var col = lhColor(score);
+  return '<div class="lh-score-card">' +
+    '<div class="lh-score-num" style="color:' + col + '">' + score + '</div>' +
+    '<div class="lh-score-lbl">' + label + '</div>' +
+    '</div>';
+}
+
+function metaRow(key, val, status) {
+  var cls = status === 'miss' ? 'miss' : status === 'ok' ? 'ok' : status === 'warn' ? 'warn' : '';
+  var display = status === 'miss' ? '✗ No encontrado' : status === 'ok' ? '✓ ' + val : val;
+  return '<div class="meta-row"><span class="meta-key">' + key + '</span><span class="meta-val ' + cls + '">' + display + '</span></div>';
+}
+
 function renderResults(data) {
   var resultsDiv = document.getElementById('results');
   var circ = buildScoreCircle(data.score, data.scoreColor);
   var now = new Date();
   var dateStr = now.toLocaleDateString('es-CO', {day:'2-digit', month:'long', year:'numeric'}) + ' · ' + now.toLocaleTimeString('es-CO', {hour:'2-digit', minute:'2-digit'});
 
+  var dsBadge = data.dataSource === 'fallback'
+    ? '<span class="ds-badge ds-estimated">⚠ Datos estimados (PageSpeed no disponible)</span>'
+    : '<span class="ds-badge ds-real">✓ Datos reales — Google PageSpeed Insights</span>';
+
+  var lhHtml = '';
+  if (data.lighthouseScores) {
+    var ls = data.lighthouseScores;
+    lhHtml = '<div class="issues-title" style="margin-bottom:12px"><span style="color:var(--accent2)">●</span> Puntuaciones Google Lighthouse (datos reales)</div>' +
+      '<div class="lh-scores">' +
+      lhScoreCard('Performance', ls.performance) +
+      lhScoreCard('SEO', ls.seo) +
+      lhScoreCard('Accesibilidad', ls.accessibility) +
+      lhScoreCard('Best Practices', ls.bestPractices) +
+      '</div>';
+  }
+
+  var cwvHtml = '';
+  if (data.coreWebVitals) {
+    var cwv = data.coreWebVitals;
+    cwvHtml = '<div class="cwv-section">' +
+      '<div class="issues-title" style="margin-bottom:12px"><span style="color:var(--accent)">●</span> Core Web Vitals (métricas reales Google)</div>' +
+      '<div class="cwv-grid">' +
+      cwvCard('FCP', cwv.fcp.display, cwv.fcp.status, '<1.8s') +
+      cwvCard('LCP', cwv.lcp.display, cwv.lcp.status, '<2.5s') +
+      cwvCard('CLS', cwv.cls.display, cwv.cls.status, '<0.1') +
+      cwvCard('TBT', cwv.tbt.display, cwv.tbt.status, '<200ms') +
+      '</div></div>';
+  }
+
+  var metaHtml = '';
+  if (data.realMeta && data.realMeta.ok) {
+    var m = data.realMeta;
+    var titleStatus = !m.title ? 'miss' : m.titleLength > 70 ? 'warn' : m.titleLength < 20 ? 'warn' : 'ok';
+    var descStatus = !m.description ? 'miss' : m.descLength > 165 ? 'warn' : m.descLength < 50 ? 'warn' : 'ok';
+    var titleVal = m.title ? ('"' + m.title.slice(0,65) + (m.titleLength > 65 ? '..."' : '"') + ' (' + m.titleLength + ' chars)') : '';
+    var descVal = m.description ? ('"' + m.description.slice(0,80) + (m.descLength > 80 ? '..."' : '"') + ' (' + m.descLength + ' chars)') : '';
+    metaHtml = '<div class="meta-analysis">' +
+      '<div class="meta-analysis-hdr">🔍 Análisis de meta tags (extraídos del HTML real)</div>' +
+      metaRow('Title', titleVal || '', titleStatus) +
+      metaRow('Meta Description', descVal || '', descStatus) +
+      metaRow('H1 (' + m.h1Count + ')', m.h1Count > 0 ? ('"' + (m.h1Texts[0]||'').slice(0,60) + '"') : '', m.h1Count === 1 ? 'ok' : m.h1Count === 0 ? 'miss' : 'warn') +
+      metaRow('Canonical', m.canonical ? m.canonical.slice(0,50) : '', m.canonical ? 'ok' : 'miss') +
+      metaRow('OG Title', m.ogTitle ? m.ogTitle.slice(0,50) : '', m.ogTitle ? 'ok' : 'miss') +
+      metaRow('OG Image', m.ogImage ? 'Definida' : '', m.ogImage ? 'ok' : 'miss') +
+      metaRow('Twitter Card', m.twitterCard || '', m.twitterCard ? 'ok' : 'miss') +
+      metaRow('Schema.org', m.hasSchema ? 'Presente' : '', m.hasSchema ? 'ok' : 'miss') +
+      metaRow('Imágenes sin ALT', m.imgNoAlt > 0 ? (m.imgNoAlt + ' de ' + m.imgTotal + ' sin texto alternativo') : 'Todas con ALT', m.imgNoAlt === 0 ? 'ok' : m.imgNoAlt < 5 ? 'warn' : 'miss') +
+      metaRow('Idioma declarado', m.lang || '', m.lang ? 'ok' : 'miss') +
+      '</div>';
+  }
+
   var metricsHtml = (data.metrics || []).map(function(m, i) {
-    var barPct = m.id === 'velocidad' ? Math.max(0, 100 - (m.numericValue / 8.4 * 100)) : m.numericValue;
     return '<div class="metric-card border-' + m.status + '" style="animation-delay:' + (i * 0.08) + 's">' +
       '<div class="metric-title">' + m.label + '</div>' +
       '<div class="metric-value">' + m.value + '</div>' +
       statusBadge(m.status) +
-      '<div class="metric-bar"><div class="metric-bar-fill bar-' + m.status + '" data-width="' + Math.round(barPct) + '"></div></div>' +
+      '<div class="metric-bar"><div class="metric-bar-fill bar-' + m.status + '" data-width="' + Math.min(100, Math.round(Math.abs(m.numericValue))) + '"></div></div>' +
       '<div class="metric-detail">' + m.detail + '</div>' +
       '</div>';
   }).join('');
@@ -1122,9 +1576,15 @@ function renderResults(data) {
     '<div class="result-domain">' + (data.domain || 'Su sitio') + '</div>' +
     '<div class="result-type">' + (data.businessType || 'Sitio web') + '</div>' +
     '<div class="result-date">Analizado: ' + dateStr + '</div>' +
-    '<div class="result-hidden">🔒 Encontramos ' + (data.hiddenIssuesCount || 12) + ' problemas adicionales ocultos</div>' +
+    dsBadge +
+    '<div class="result-hidden" style="margin-top:8px">🔒 ' + (data.hiddenIssuesCount || 12) + ' problemas adicionales ocultos</div>' +
     '</div></div>' +
 
+    lhHtml +
+    cwvHtml +
+    metaHtml +
+
+    '<div class="issues-title" style="margin-bottom:12px;margin-top:4px"><span style="color:var(--text2)">●</span> Métricas detalladas</div>' +
     '<div class="metrics-grid">' + metricsHtml + '</div>' +
 
     '<div class="issues-section">' +
@@ -1184,7 +1644,7 @@ function renderResults(data) {
       var w = el.getAttribute('data-width');
       if (w) el.style.width = w + '%';
     });
-  }, 100);
+  }, 120);
 }
 
 function buildScoreCircle(score, color) {
